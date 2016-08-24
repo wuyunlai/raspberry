@@ -1,0 +1,73 @@
+#换源
+sudo cp /etc/apt/sources.list /etc/apt/sources.list.old
+sudo nano /etc/apt/sources.list
+
+#更新
+sudo apt-mark hold raspberrypi-bootloader
+sudo apt-get update
+#sudo apt-get upgrade
+
+#配置
+#sudo raspi-config
+
+deb http://mirrors.ustc.edu.cn/raspbian/raspbian/ wheezy main contrib non-free rpi
+deb http://mirrors.neusoft.edu.cn/raspbian/raspbian wheezy main contrib non-free rpi
+
+#中文字体、输入法
+sudo apt-get install ttf-wqy-zenhei
+sudo apt-get install fcitx fcitx-googlepinyin fcitx-module-cloudpinyin fcitx-sunpinyin
+
+#远程桌面VNC
+sudo apt-get install tightvncserver
+sudo wget http://www.penguintutor.com/otherfiles/tightvncserver-init.txt
+sudo mv tightvncserver-init.txt /etc/init.d/tightvncserver
+#sudo chown root:root /etc/init.d/tightvncserver
+sudo chmod 755 /etc/init.d/tightvncserver
+sudo update-rc.d tightvncserver defaults
+sudo /etc/init.d/tightvncserver start
+
+#设置域名*动态ip
+sudo nano ./dnspod.py
+sudo chmod 755 /home/pi/dnspod.py
+sudo chmod 755 /etc/init.d/dnspod
+#sudo /etc/init.d/dnspod start
+sudo update-rc.d dnspod defaults
+
+#安装nginx  
+sudo apt-get install nginx    
+#启动nginx  
+sudo /etc/init.d/nginx start    
+#安装php-fpm  
+sudo apt-get install php5-fpm     
+#安装sqlite  
+sudo apt-get install php5-sqlite sqlite sqlite3
+
+
+#导入签名
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key 5243CDED
+#安装xbmc
+sudo apt-get install xbmc
+#添加相应的用户组：
+addgroup --system input
+#设置相应规则：
+sudo nano /etc/udev/rules.d/99-input.rules:
+SUBSYSTEM=="input", GROUP="input", MODE="0660"
+KERNEL=="tty[0-9]*", GROUP="tty", MODE="0660"
+#启用XBMC：
+nano /etc/default/xbmc　#修改此项为1
+ENABLED=1
+#启动XBMC测试：
+sudo service xbmc start
+
+#Tonido私有云
+sudo mkdir /usr/local/tonido
+cd /usr/local/tonido
+sudo wget http://patch.codelathe.com/tonido/live/installer/armv6l-rpi/tonido.tar.gz
+sudo tar-zxvf tonido.tar.gz
+./tonido.sh start
+
+#下载seafile
+sudo mkdir /usr/local/seafile
+cd /usr/local/seafile
+sudo wget https://github.com/haiwen/seafile-rpi/releases/download/v5.1.1/seafile-server_stable_5.1.1_pi.tar.gz
+sudo tar-zxvf seafile-server_stable_5.1.1_pi.tar.gz
