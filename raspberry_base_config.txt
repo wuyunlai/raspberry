@@ -10,8 +10,8 @@ sudo apt-get update
 #配置
 #sudo raspi-config
 
-deb http://mirrors.ustc.edu.cn/raspbian/raspbian/ wheezy main contrib non-free rpi
-deb http://mirrors.neusoft.edu.cn/raspbian/raspbian wheezy main contrib non-free rpi
+deb http://mirrors.ustc.edu.cn/raspbian/raspbian/ jessie main contrib non-free rpi
+deb http://mirrors.neusoft.edu.cn/raspbian/raspbian jessie main contrib non-free rpi
 
 #中文字体、输入法
 sudo apt-get install ttf-wqy-zenhei
@@ -42,7 +42,17 @@ sudo apt-get install php5-fpm
 #安装sqlite  
 sudo apt-get install php5-sqlite sqlite sqlite3
 
+#升级安装蓝牙相关软件包
+#sudo apt-get update 
+#sudo apt-get upgrade -y 
+#sudo apt-get dist-upgrade -y 
+sudo apt-get install pi-bluetooth bluez bluez-firmware blueman
+#最关键一点：添加pi用户到蓝牙组
+sudo usermod -G bluetooth -a pi
+#重启
+#sudo reboot
 
+#KODI
 #导入签名
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key 5243CDED
 #安装xbmc
@@ -71,3 +81,5 @@ sudo mkdir /usr/local/seafile
 cd /usr/local/seafile
 sudo wget https://github.com/haiwen/seafile-rpi/releases/download/v5.1.1/seafile-server_stable_5.1.1_pi.tar.gz
 sudo tar-zxvf seafile-server_stable_5.1.1_pi.tar.gz
+
+
