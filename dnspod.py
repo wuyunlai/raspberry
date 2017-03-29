@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python
+#!/usr/bin/env python
 #-*- coding:utf-8 -*-
  
 import httplib, urllib
@@ -16,7 +16,7 @@ params = dict(
     sub_domain="@", # replace with your sub_domain
     #record_id=201562621
     #sub_domain="*"
-    record_line="默认",
+    record_line="Ĭ��",
 )
 current_ip = None
  
