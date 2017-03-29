@@ -1,0 +1,31 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          dnspod server
+# Required-Start:    $local_fs
+# Required-Stop:     $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start/stop dnspod server
+### END INIT INFO
+
+### Customize this entry
+export USER='pi'
+### End customization required
+
+eval cd ~$USER
+
+case "$1" in
+  start)
+    echo "Starting dnspod server for $USER "
+    /home/pi/dnspod.py
+    ;;
+  stop)
+    echo "Dnspod server stopped"
+     kill $( ps aux | grep -m 1 'python /home/pi/dnspod.py' | awk '{ print $2 }' ) 
+    ;;
+  *)
+    echo "Usage: /etc/init.d/dnspod server {start|stop}"
+    exit 1
+    ;;
+esac
+exit 0

@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
- 
+
 import httplib, urllib
 import socket
 import time
- 
+
 params = dict(
     login_email="wuyunlai@163.com", # replace with your email
     login_password="qoiqwe198123", # replace with your password
@@ -16,29 +16,29 @@ params = dict(
     sub_domain="@", # replace with your sub_domain
     #record_id=201562621
     #sub_domain="*"
-    record_line="Ä¬ÈÏ",
+    record_line="é»˜è®¤",
 )
 current_ip = None
- 
+
 def ddns(ip):
     params.update(dict(value=ip))
     headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/json"}
     conn = httplib.HTTPSConnection("dnsapi.cn")
     conn.request("POST", "/Record.Ddns", urllib.urlencode(params), headers)
-     
+
     response = conn.getresponse()
     print response.status, response.reason
     data = response.read()
     print data
     conn.close()
     return response.status == 200
- 
+
 def getip():
     sock = socket.create_connection(('ns1.dnspod.net', 6666))
     ip = sock.recv(16)
     sock.close()
     return ip
- 
+
 if __name__ == '__main__':
     while True:
         try:

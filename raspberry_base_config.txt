@@ -1,82 +1,160 @@
-#��Դ
+#换源
+sudo wget https://raw.githubusercontent.com/wuyunlai/raspberry/master/sources.list
 sudo cp /etc/apt/sources.list /etc/apt/sources.list.old
+sudo cp sources.list /etc/apt/sources.list
 sudo nano /etc/apt/sources.list
 
-#����
+#更新
 sudo apt-mark hold raspberrypi-bootloader
 sudo apt-get update
 #sudo apt-get upgrade
 
-#����
+#配置
 #sudo raspi-config
 
 deb http://mirrors.ustc.edu.cn/raspbian/raspbian/ jessie main contrib non-free rpi
 deb http://mirrors.neusoft.edu.cn/raspbian/raspbian jessie main contrib non-free rpi
 
-#�������塢���뷨
+#中文字体、输入法
 sudo apt-get install ttf-wqy-zenhei
 sudo apt-get install fcitx fcitx-googlepinyin fcitx-module-cloudpinyin fcitx-sunpinyin
 
-#Զ������VNC
+#远程桌面VNC
 sudo apt-get install tightvncserver
 sudo wget http://www.penguintutor.com/otherfiles/tightvncserver-init.txt
+sudo wget https://raw.githubusercontent.com/wuyunlai/raspberry/master/tightvncserver-init.txt
 sudo mv tightvncserver-init.txt /etc/init.d/tightvncserver
 #sudo chown root:root /etc/init.d/tightvncserver
 sudo chmod 755 /etc/init.d/tightvncserver
 sudo update-rc.d tightvncserver defaults
 sudo /etc/init.d/tightvncserver start
 
-#��������*��̬ip
-sudo nano ./dnspod.py
-sudo chmod 755 /home/pi/dnspod.py
-sudo chmod 755 /etc/init.d/dnspod
-#sudo /etc/init.d/dnspod start
-sudo update-rc.d dnspod defaults
+#连接无线网络
+#用vi或在图形界面下用gedit编辑文件 /etc/wpa_supplicant/wpa_supplicant.conf, 在文件末尾填入路由器信息如下所示：
+#network={
+#        ssid="YourWiFiESSID"
+#        psk="YourWiFiPassword"
+#}
+#其中，YourWiFiESSID和YourWiFiPassword请替换成你要连接的无线AP名称和密码。
+sudo wget https://raw.githubusercontent.com/wuyunlai/raspberry/master/wpa_supplicant.conf
+sudo cp wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
+sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+#保存退出后，执行以下命令即可连接WiFi:
+#断开WIFI
+ifdown wlan0
+#开启WIFI
+ifup wlan0
 
-#��װnginx  
+如果你的WiFi密码中有特殊字符，或者你不希望明文存放密码，你可以使用wpa_passphrase命令为WiFi密码生成一个密钥(psk)，用密钥来代替密码 ，在命令行下，可输入以下命令生成密钥:
+
+wpa_passphrase YourWiFiESSID
+
+在提示输入密码时，输入你的WiFi密码，再打开 /etc/wpa_supplicant/wpa_supplicant.conf 文件你会发现密钥已经被更新，你可以删除明文的密码了。
+#如果你的WiFi当前处于无线热点模式，你需要先退出该模式方可连接到路由器，使用以下命令退出无线热点模式：
+sudo turn-wifi-into-apmode no
+#配置Wi-Fi无线热点
+#可以通过以下命令，将Wi-Fi切换至无线热点模式：
+turn-wifi-into-apmode yes
+#按提示重启即可，默认的热点名称为 nanopi2-wifiap，密码为123456789。
+#现在，你可以在电脑上搜索并连接nanopi2-wifiap这个无线热点，连接成功后，可以通过ssh到192.168.8.1这个地址来登录NanoPi M3:
+ssh root@192.168.8.1
+#在提示输入密码时，输入预设的密码fa，即可登入。
+#为了保证ssh的流畅，我们用以下命令关闭wifi的省电模式:
+iwconfig wlan0 power off
+#WiFi工作模式可通过以下命令查询：
+cat /sys/module/bcmdhd/parameters/op_mode
+#输出为数字2则表示当前处于无线热点模式，要切换回普通的Station模式，输入如下命令：
+turn-wifi-into-apmode no
+
+#使用蓝牙传输文件
+#以传输文件到手机为例进行说明，首先，将你的手机蓝牙设置为可侦测状态，然后执行以下命令开始蓝牙搜索：
+hcitool scan
+#搜索到设备时，结果举例如下：
+#Scanning ...
+#38:BC:1A:B1:7E:DD MEIZU MX4
+#这表示搜索到一台名为MEIZU MX4的手机，我们记下手机名称前面的MAC地址，然后用sdptool命令查看该手机支持的蓝牙服务：
+sdptool browse 38:BC:1A:B1:7E:DD
+#注：上述命令中的MAC地址请替换成手机实际的
+#这个命令会详细列出手机蓝牙所支持的协议，我们需要关心的是一个名为 OBEX Object Push 的文件传输服务，以MEIZU MX4手机为例，其显示结果如下所示：
+#Service Name: OBEX Object Push
+#Service RecHandle: 0x1000b
+#Service Class ID List:
+#"OBEX Object Push" (0x1105)
+#Protocol Descriptor List:
+#"L2CAP" (0x0100)
+#"RFCOMM" (0x0003)
+#Channel: 25
+#"OBEX" (0x0008)
+#Profile Descriptor List:
+#"OBEX Object Push" (0x1105)
+#Version: 0x0100
+#从上面的信息可以看到，这个手机的OBEX Object Push服务的所用的频道是25, 我们需要将它传递给ussp-push命令，最后发起文件传输请求的命令如下：
+ussp-push 38:BC:1A:B1:7E:DD@25 example.jpg example.jpg
+#注：上述命令中的MAC地址、频道和文件名请替换成实际的
+#执行上述命令后，请留意手机屏幕，正常情况下手机会弹出配对和接收文件的提示，确定后就开始文件传輪了。
+#蓝牙常见问题：
+#1) 开发板上找不到蓝牙设备, 可尝试用以下命令开启蓝牙：
+rfkill unblock 0
+#2) 提示找不到相关命令，可尝试用以下命令安装相关软件：
+apt-get install bluetooth bluez obexftp openobex-apps python-gobject ussp-push
+
+#设置域名*动态ip
+sudo wget https://raw.githubusercontent.com/wuyunlai/raspberry/master/dnspod.py
+#sudo nano ./dnspod.py
+sudo python dnspod.py
+sudo chmod 755 /home/pi/dnspod.py
+#起服务方式失败
+#sudo wget https://raw.githubusercontent.com/wuyunlai/raspberry/master/dnspod_service.txt
+#sudo mv dnspod_service.txt /etc/init.d/dnspod
+#sudo chmod 755 /etc/init.d/dnspod
+#sudo /etc/init.d/dnspod start
+#sudo update-rc.d dnspod defaults
+#改为修改/etc/rc.local,在exit 0之前添加 python /home/pi/dnspod.py
+
+#安装nginx  
 sudo apt-get install nginx    
-#����nginx  
+#启动nginx  
 sudo /etc/init.d/nginx start    
-#��װphp-fpm  
+#安装php-fpm  
 sudo apt-get install php5-fpm     
-#��װsqlite  
+#安装sqlite  
 sudo apt-get install php5-sqlite sqlite sqlite3
 
-#������װ�������������
+#升级安装蓝牙相关软件包
 #sudo apt-get update 
 #sudo apt-get upgrade -y 
 #sudo apt-get dist-upgrade -y 
 sudo apt-get install pi-bluetooth bluez bluez-firmware blueman
-#��ؼ�һ�㣺����pi�û���������
+#最关键一点：添加pi用户到蓝牙组
 sudo usermod -G bluetooth -a pi
-#����
+#重启
 #sudo reboot
 
 #KODI
-#����ǩ��
+#导入签名
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key 5243CDED
-#��װxbmc
+#安装xbmc
 sudo apt-get install xbmc
-#������Ӧ���û��飺
+#添加相应的用户组：
 addgroup --system input
-#������Ӧ����
+#设置相应规则：
 sudo nano /etc/udev/rules.d/99-input.rules:
 SUBSYSTEM=="input", GROUP="input", MODE="0660"
 KERNEL=="tty[0-9]*", GROUP="tty", MODE="0660"
-#����XBMC��
-nano /etc/default/xbmc��#�޸Ĵ���Ϊ1
+#启用XBMC：
+nano /etc/default/xbmc　#修改此项为1
 ENABLED=1
-#����XBMC���ԣ�
+#启动XBMC测试：
 sudo service xbmc start
 
-#Tonido˽����
+#Tonido私有云
 sudo mkdir /usr/local/tonido
 cd /usr/local/tonido
 sudo wget http://patch.codelathe.com/tonido/live/installer/armv6l-rpi/tonido.tar.gz
 sudo tar-zxvf tonido.tar.gz
 ./tonido.sh start
 
-#����seafile
+#下载seafile
 sudo mkdir /usr/local/seafile
 cd /usr/local/seafile
 sudo wget https://github.com/haiwen/seafile-rpi/releases/download/v5.1.1/seafile-server_stable_5.1.1_pi.tar.gz
