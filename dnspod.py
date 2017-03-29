@@ -1,85 +1,53 @@
-﻿#!/usr/bin/env python  
-#<strong style="color:black; background-color:#99ff99">-</strong>*<strong style="color:black; background-color:#99ff99">-</strong> coding:utf<strong style="color:black; background-color:#99ff99">-</strong>8 <strong style="color:black; background-color:#99ff99">-</strong>*<strong style="color:black; background-color:#99ff99">-</strong>  
-   
-import urllib2,urllib,json  
-   
-class Dns:  
-     #Dnspod账户  
-     _dnspod_user = 'wuyunlai@163.com'  
-     #Dnspod密码  
-     _dnspod_pwd = 'qoiqwe198123'  
-     #Dnspod主域名，注意：是你注册的域名  
-     _domain = 'wuyl.cn'  
-     #子域名，如www，如果要使用根域名，用@  
-     _sub_domain = '@'  
-   
-     def getMyIp(self):  
-         try:  
-             u = urllib2.urlopen('http://members.3322.org/dyndns/getip')  
-             return u.read()  
-         except HTTPError as e:  
-             print e.read()  
-             return None;  
-   
-     def api_call(self,api,data):  
-         try:  
-             api = 'https://dnsapi.cn/' + api  
-             data['login_email'] = self._dnspod_user  
-             data['login_password'] = self._dnspod_pwd  
-             data['format'] ='json'  
-             data['lang'] =  'cn'  
-             data['error_on_empty'] = 'no'  
-   
-             data = urllib.urlencode(data)  
-             req = urllib2.Request(api,data,  
-                 headers = {  
-                     'UserAgent' : 'LocalDomains/1.0.0(roy@leadnt.com)',  
-                     'Content<strong style="color:black; background-color:#99ff99">-</strong>Type':'application/x<strong style="color:black; background-color:#99ff99">-</strong>www<strong style="color:black; background-color:#99ff99">-</strong>form<strong style="color:black; background-color:#99ff99">-</strong>urlencoded;text/html; charset=utf8',  
-                     })  
-             res = urllib2.urlopen(req)  
-             html = res.read()  
-             results = json.loads(html)  
-             return results  
-         except Exception as e:  
-             print e  
-   
-     def main(self):  
-         ip = self.getMyIp()  
-         dinfo = self.api_call('domain.info',{'domain' : self._domain})  
-         domainId = dinfo['domain']['id']  
-         rs = self.api_call('record.list',  
-             {  
-                 'domain_id': domainId,  
-                 'offset' :'0',  
-                 'length' : '1',  
-                 'sub_domain' : self._sub_domain  
-             })  
-   
-         if rs['info']['record_total'] == 0:  
-             self.api_call('record.create',  
-                 {  
-                     'domain_id' : domainId,  
-                     'sub_domain' : self._sub_domain,  
-                     'record_type' : 'A',  
-                     'record_line' : '默认',  
-                     'value' : ip,  
-                     'ttl' : '3600'  
-                 })  
-             print 'Success.'  
-         else:  
-             if rs['records'][0]['value'].strip() != ip.strip():  
-                 self.api_call('record.modify',  
-                 {  
-                     'domain_id' : domainId,  
-                     'record_id' : rs['records'][0]['id'],  
-                     'sub_domain' : self._sub_domain,  
-                     'record_type' : 'A',  
-                     'record_line' : '默认',  
-                     'value' : ip  
-                     })  
-             else:  
-                 print 'Success.'  
-   
- if __name__ == '__main__':  
-     d = Dns();  
-     d.main()
+﻿#!/usr/bin/env python
+#-*- coding:utf-8 -*-
+ 
+import httplib, urllib
+import socket
+import time
+ 
+params = dict(
+    login_email="wuyunlai@163.com", # replace with your email
+    login_password="qoiqwe198123", # replace with your password
+    format="json",
+    #curl curl -k https://dnsapi.cn/Domain.List -d "login_email=wuyunlai@163.com&login_password=qoiqwe198123"
+    domain_id=39960861, # replace with your domain_od, can get it by API Domain.List
+    #curl -k https://dnsapi.cn/Record.List -d "login_email=wuyunlai@163.com&login_password=qoiqwe198123&domain_id=39960861"
+    record_id=201279720, # replace with your record_id, can get it by API Record.List
+    sub_domain="@", # replace with your sub_domain
+    #record_id=201562621
+    #sub_domain="*"
+    record_line="默认",
+)
+current_ip = None
+ 
+def ddns(ip):
+    params.update(dict(value=ip))
+    headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/json"}
+    conn = httplib.HTTPSConnection("dnsapi.cn")
+    conn.request("POST", "/Record.Ddns", urllib.urlencode(params), headers)
+     
+    response = conn.getresponse()
+    print response.status, response.reason
+    data = response.read()
+    print data
+    conn.close()
+    return response.status == 200
+ 
+def getip():
+    sock = socket.create_connection(('ns1.dnspod.net', 6666))
+    ip = sock.recv(16)
+    sock.close()
+    return ip
+ 
+if __name__ == '__main__':
+    while True:
+        try:
+            ip = getip()
+            print ip
+            if current_ip != ip:
+                if ddns(ip):
+                    current_ip = ip
+        except Exception, e:
+            print e
+            pass
+        time.sleep(30)
