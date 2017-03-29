@@ -1,44 +1,44 @@
-#°¢ÀïÔÆ
+#é˜¿é‡Œäº‘
 deb http://mirrors.aliyun.com/raspbian/raspbian/ jessie main contrib non-free rpi
 deb-src http://mirrors.aliyun.com/raspbian/raspbian/ jessie main contrib non-free rpi
 
-#ËÑºü
+#æœç‹
 #deb http://mirrors.sohu.com/raspbian/raspbian/ jessie main contrib non-free rpi
 #deb-src http://mirrors.sohu.com/raspbian/raspbian/ jessie main contrib non-free rpi
 
-#ÖĞÉ½´óÑ§
+#ä¸­å±±å¤§å­¦
 #deb http://mirror.sysu.edu.cn/raspbian/raspbian/ jessie main contrib non-free
 #deb-src http://mirror.sysu.edu.cn/raspbian/raspbian/ jessie main contrib non-free
 
-#ÖĞ¹ú¿ÆÑ§¼¼Êõ´óÑ§
+#ä¸­å›½ç§‘å­¦æŠ€æœ¯å¤§å­¦
 #deb http://mirrors.ustc.edu.cn/raspbian/raspbian/ jessie main contrib non-free
 #deb-src http://mirrors.ustc.edu.cn/raspbian/raspbian/ jessie main contrib non-free
 
-#Çå»ª´óÑ§
+#æ¸…åå¤§å­¦
 #deb http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/ jessie main contrib non-free
 #deb-src http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/ jessie main contrib non-free
 
-#»ªÖĞ¿Æ¼¼´óÑ§
+#åä¸­ç§‘æŠ€å¤§å­¦
 #deb http://mirrors.hustunique.com/raspbian/raspbian/ jessie main contrib non-free
 #deb-src http://mirrors.hustunique.com/raspbian/raspbian/ jessie main contrib non-free
 #Arch Linux ARM http://mirrors.hustunique.com/archlinuxarm/
 
-#´óÁ¬¶«ÈíĞÅÏ¢Ñ§ÔºÔ´£¨±±·½ÓÃ»§£©
+#å¤§è¿ä¸œè½¯ä¿¡æ¯å­¦é™¢æºï¼ˆåŒ—æ–¹ç”¨æˆ·ï¼‰
 #deb http://mirrors.neusoft.edu.cn/raspbian/raspbian/ jessie main contrib non-free
 #deb-src http://mirrors.neusoft.edu.cn/raspbian/raspbian/ jessie main contrib non-free
 
-#ÖØÇì´óÑ§Ô´£¨ÖĞÎ÷²¿ÓÃ»§£©
+#é‡åº†å¤§å­¦æºï¼ˆä¸­è¥¿éƒ¨ç”¨æˆ·ï¼‰
 #deb http://mirrors.cqu.edu.cn/Raspbian/raspbian/ jessie main contrib non-free
 #deb-src http://mirrors.cqu.edu.cn/Raspbian/raspbian/ jessie main contrib non-free
 
-#ĞÂ¼ÓÆÂ¹úÁ¢´óÑ§
+#æ–°åŠ å¡å›½ç«‹å¤§å­¦
 #deb http://mirror.nus.edu.sg/raspbian/raspbian/ jessie main contrib non-free
 #deb-src http://mirror.nus.edu.sg/raspbian/raspbian/ jessie main contrib non-free
 
-#Å£½ò´óÑ§
+#ç‰›æ´¥å¤§å­¦
 #deb http://mirror.ox.ac.uk/sites/archive.raspbian.org/archive/raspbian/ jessie main contrib non-free
 #deb-src http://mirror.ox.ac.uk/sites/archive.raspbian.org/archive/raspbian/ jessie main contrib non-free
 
-#º«¹úKAIST´óÑ§
+#éŸ©å›½KAISTå¤§å­¦
 #deb http://ftp.kaist.ac.kr/raspbian/raspbian/ jessie main contrib non-free
 #deb-src http://ftp.kaist.ac.kr/raspbian/raspbian/ jessie main contrib non-free
