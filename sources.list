@@ -1,36 +1,44 @@
+#阿里云
+deb http://mirrors.aliyun.com/raspbian/raspbian/ jessie main contrib non-free rpi
+deb-src http://mirrors.aliyun.com/raspbian/raspbian/ jessie main contrib non-free rpi
+
+#搜狐
+#deb http://mirrors.sohu.com/raspbian/raspbian/ jessie main contrib non-free rpi
+#deb-src http://mirrors.sohu.com/raspbian/raspbian/ jessie main contrib non-free rpi
+
 #中山大学
-deb http://mirror.sysu.edu.cn/raspbian/raspbian/ jessie main contrib non-free
-deb-src http://mirror.sysu.edu.cn/raspbian/raspbian/ jessie main contrib non-free
+#deb http://mirror.sysu.edu.cn/raspbian/raspbian/ jessie main contrib non-free
+#deb-src http://mirror.sysu.edu.cn/raspbian/raspbian/ jessie main contrib non-free
 
 #中国科学技术大学
-deb http://mirrors.ustc.edu.cn/raspbian/raspbian/ jessie main contrib non-free
-deb-src http://mirrors.ustc.edu.cn/raspbian/raspbian/ jessie main contrib non-free
+#deb http://mirrors.ustc.edu.cn/raspbian/raspbian/ jessie main contrib non-free
+#deb-src http://mirrors.ustc.edu.cn/raspbian/raspbian/ jessie main contrib non-free
 
 #清华大学
-deb http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/ jessie main contrib non-free
-deb-src http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/ jessie main contrib non-free
+#deb http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/ jessie main contrib non-free
+#deb-src http://mirrors.tuna.tsinghua.edu.cn/raspbian/raspbian/ jessie main contrib non-free
 
 #华中科技大学
-deb http://mirrors.hustunique.com/raspbian/raspbian/ jessie main contrib non-free
-deb-src http://mirrors.hustunique.com/raspbian/raspbian/ jessie main contrib non-free
+#deb http://mirrors.hustunique.com/raspbian/raspbian/ jessie main contrib non-free
+#deb-src http://mirrors.hustunique.com/raspbian/raspbian/ jessie main contrib non-free
 #Arch Linux ARM http://mirrors.hustunique.com/archlinuxarm/
 
 #大连东软信息学院源（北方用户）
-deb http://mirrors.neusoft.edu.cn/raspbian/raspbian/ jessie main contrib non-free
-deb-src http://mirrors.neusoft.edu.cn/raspbian/raspbian/ jessie main contrib non-free
+#deb http://mirrors.neusoft.edu.cn/raspbian/raspbian/ jessie main contrib non-free
+#deb-src http://mirrors.neusoft.edu.cn/raspbian/raspbian/ jessie main contrib non-free
 
 #重庆大学源（中西部用户）
-deb http://mirrors.cqu.edu.cn/Raspbian/raspbian/ jessie main contrib non-free
-deb-src http://mirrors.cqu.edu.cn/Raspbian/raspbian/ jessie main contrib non-free
+#deb http://mirrors.cqu.edu.cn/Raspbian/raspbian/ jessie main contrib non-free
+#deb-src http://mirrors.cqu.edu.cn/Raspbian/raspbian/ jessie main contrib non-free
 
 #新加坡国立大学
-deb http://mirror.nus.edu.sg/raspbian/raspbian/ jessie main contrib non-free
-deb-src http://mirror.nus.edu.sg/raspbian/raspbian/ jessie main contrib non-free
+#deb http://mirror.nus.edu.sg/raspbian/raspbian/ jessie main contrib non-free
+#deb-src http://mirror.nus.edu.sg/raspbian/raspbian/ jessie main contrib non-free
 
 #牛津大学
-deb http://mirror.ox.ac.uk/sites/archive.raspbian.org/archive/raspbian/ jessie main contrib non-free
-deb-src http://mirror.ox.ac.uk/sites/archive.raspbian.org/archive/raspbian/ jessie main contrib non-free
+#deb http://mirror.ox.ac.uk/sites/archive.raspbian.org/archive/raspbian/ jessie main contrib non-free
+#deb-src http://mirror.ox.ac.uk/sites/archive.raspbian.org/archive/raspbian/ jessie main contrib non-free
 
 #韩国KAIST大学
-deb http://ftp.kaist.ac.kr/raspbian/raspbian/ jessie main contrib non-free
-deb-src http://ftp.kaist.ac.kr/raspbian/raspbian/ jessie main contrib non-free
+#deb http://ftp.kaist.ac.kr/raspbian/raspbian/ jessie main contrib non-free
+#deb-src http://ftp.kaist.ac.kr/raspbian/raspbian/ jessie main contrib non-free
