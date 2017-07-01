@@ -174,6 +174,67 @@ sudo samba restart
 sudo chmod -R 777 /home/pi/Public/
 #配置完成后即可从局域网内其他电脑访问共享文件夹，Windows下访问目录为\\IP\Folder，例如：\\192.168.1.55\Public
 
+#安装Aria2 http://aria2c.com/usage.html
+sudo apt-get install aria2
+#新建文件夹
+sudo mkdir ~/.aria2
+#新建session文件
+sudo touch ~/.aria2/aria2.session
+#新建配置文件
+sudo nano ~/.aria2/aria2.conf
+#下载配置文件 sample http://aria2c.com/archiver/aria2.conf
+sudo wget https://raw.githubusercontent.com/wuyunlai/raspberry/master/aria2.conf
+sudo mv aria2.conf ~/.aria2/aria2.conf
+#保存配置并执行以下命令：
+sudo aria2c --conf-path=/home/pi/.aria2/aria2.conf
+#把aria2做成系统的服务：
+sudo nano /etc/init.d/aria2c
+sudo chmod 755 /etc/init.d/aria2c
+#测试服务是否可以启动：
+sudo service aria2c start
+#如果只显示Starting aria2c，没有其他错误提示的话就成功了。
+#添加aria2c服务自动运行：
+sudo update-rc.d aria2c defaults
+#Aria2相关的好了
+#安装完成后，启用监听RPC
+sudo aria2c --enable-rpc --rpc-listen-all
+#网页控制aria2下载。
+#进入到/var/www/html目录
+cd /var/www/html
+#aria2webui & yaaw 汉化版 http://dy.ghostry.cn/(https://github.com/ghostry/webui-aria2,https://github.com/ghostry/yaaw)  https://github.com/ziahamza/webui-aria2  http://github.com/wzhy90/yaaw
+git clone https://github.com/ghostry/webui-aria2
+#重命名方便访问
+sudo mv  ./webui-aria2  ./aria2
+sudo chmod 755 /var/www/html/aria2
+#管理器用的是webui-aria2，网上的是英文的，下载的已经翻译好中文了。用浏览器打开yaaw：http://192.168.1.14/aria2
+
+#安装nginx
+sudo apt-get install nginx
+#启动nginx
+sudo /etc/init.d/nginx start
+#添加nginx服务自动运行：
+sudo update-rc.d nginx defaults
+#安装php-fpm
+sudo apt-get install php5-fpm 
+#安装sqlite
+sudo apt-get install php5-sqlite
+#Nginx配置：
+sudo nano /etc/nginx/sites-available/default
+##修改端口： 
+#listen 80; ## listen for ipv4. 
+##修改index: 
+#index index.php index.html index.htm 
+##修改root: 
+#root /var/www; 
+##注意：去掉PHP前注释
+#location ~ \.php$ {
+#　fastcgi_pass unix:/var/run/php5-fpm.sock;
+#　fastcgi_index index.php;
+#　include fastcgi_params;
+#}
+#重启Nginx
+sudo /etc/init.d/nginx reload
+
 #Tonido私有云
 sudo mkdir /usr/local/tonido
 cd /usr/local/tonido
@@ -187,4 +248,16 @@ cd /usr/local/seafile
 sudo wget https://github.com/haiwen/seafile-rpi/releases/download/v5.1.1/seafile-server_stable_5.1.1_pi.tar.gz
 sudo tar-zxvf seafile-server_stable_5.1.1_pi.tar.gz
 
+#scrapy pip
+#ssudo apt-get install python-dev
+#ssudo apt-get install libevent-dev
+#ssudo apt-get install python-pip
+#ssudo pip install Scrapy
+sudo apt-get install openssl*
+sudo apt-get install build-essential python3-dev python3-pip libssl-dev libffi-dev libxml2 libxml2-dev libxslt1-dev zlib1g-dev
+sudo pip3 install --upgrade pip
+sudo pip3 install Scrapy
+sudo pip3 install pymysql
 
+#开启root用户
+sudo passwd root
