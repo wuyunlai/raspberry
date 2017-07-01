@@ -98,6 +98,13 @@ rfkill unblock 0
 #2) 提示找不到相关命令，可尝试用以下命令安装相关软件：
 apt-get install bluetooth bluez obexftp openobex-apps python-gobject ussp-push
 
+#键盘布局
+sudo nano /etc/default/keyboard
+#把里面XKBLAYOUT变量的值改为“us”
+#让它立即生效，键入，
+sudo udevadm trigger --subsystem-match=input --action=change
+#或者重启电脑即可
+
 #设置域名*动态ip
 sudo wget https://raw.githubusercontent.com/wuyunlai/raspberry/master/dnspod.py
 #sudo nano ./dnspod.py
@@ -214,8 +221,12 @@ sudo apt-get install nginx
 sudo /etc/init.d/nginx start
 #添加nginx服务自动运行：
 sudo update-rc.d nginx defaults
-#安装php-fpm
+#查看nginx状态
+sudo service nginx status
+#安装php-fpm php7.0-fpm
 sudo apt-get install php5-fpm 
+#安装mysql
+sudo apt-get install php5-mysql
 #安装sqlite
 sudo apt-get install php5-sqlite
 #Nginx配置：
@@ -234,6 +245,55 @@ sudo nano /etc/nginx/sites-available/default
 #}
 #重启Nginx
 sudo /etc/init.d/nginx reload
+
+#端口占用
+#查看
+netstat -ntpl
+#杀掉nginx的重复进程
+sudo killall -9 nginx
+
+#安装PHP7
+#在/etc/apt/sources.list文件中添加下面两行文字以安装dotdeb.org软件源。
+deb http://packages.dotdeb.org jessie all
+deb-src http://packages.dotdeb.org jessie all
+#下载并安装GnuPG key
+wget https://www.dotdeb.org/dotdeb.gpg
+sudo apt-key add dotdeb.gpg
+#更新本地软件包索引并安装PHP7
+sudo apt-get update
+sudo apt-get install php7.0-fpm php7.0-mysql php7.0-common php7.0-gd php7.0-json php7.0-cli php7.0-curl
+
+#mysql安装
+sudo apt-get install mysql-server mysql-client libmysqlclient-dev
+#如果中途有问题就执行以下 apt-get update
+#查询是否安装成功：sudo netstat -tap | grep mysql
+########################################################
+#设置mysql远程访问
+#1、编辑mysql配置文件/etc/mysql/my.cnf，把其中bind-address = 127.0.0.1注释了
+sudo nano /etc/mysql/my.cnf
+#2、使用root进入mysql命令行，执行如下2个命令，示例中mysql的root账号密码：root
+root@ubuntu:~# mysql -uroot -proot
+mysql>grant all on *.* to root@'%' identified by 'root' with grand option;
+# *.*：第一个*代表数据库名；第二个*代表表名。这里的意思是所有数据库里的所有表都授权给用户。root：授予root账号。“%”：表示授权的用户IP可以指定，这里代表任意的IP地址都能访问MySQL数据库
+#刷新权限信息，也即是让我们所作的设置马上生效。
+mysql>flush privileges;
+#3. 重启mysql
+/etc/init.d/mysql restart
+
+#设置数据库密码
+mysql> SET PASSWORD FOR 'root'@'localhost' = PASSWORD('你的新密码');
+#为wordpress创建数据库
+mysql> CREATE DATABASE IF NOT EXISTS wordpress DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+#确认数据库已建立
+mysql> show databases;
+
+#MySql Web控制台
+#下载phpMyAdmin
+wget https://files.phpmyadmin.net/phpMyAdmin/4.7.2/phpMyAdmin-4.7.2-all-languages.zip
+sudo apt-get install zip unzip
+unzip phpMyAdmin-4.7.2-all-languages.zip
+cp config.sample.inc.php config.inc.php
+sudo nano config.inc.php
 
 #Tonido私有云
 sudo mkdir /usr/local/tonido
@@ -255,9 +315,16 @@ sudo tar-zxvf seafile-server_stable_5.1.1_pi.tar.gz
 #ssudo pip install Scrapy
 sudo apt-get install openssl*
 sudo apt-get install build-essential python3-dev python3-pip libssl-dev libffi-dev libxml2 libxml2-dev libxslt1-dev zlib1g-dev
-sudo pip3 install --upgrade pip
-sudo pip3 install Scrapy
-sudo pip3 install pymysql
+pip3 install --upgrade pip
+pip3 install Scrapy
+pip3 install pymysql
+#pip3 install twisted==13.1.0
+#运行scrapy爬虫
+#scrapy runspider myspider.py
+#创建scrapy工程
+#scrapy startproject tutorial
 
 #开启root用户
 sudo passwd root
+sudo passwd -u root
+su root
